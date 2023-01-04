@@ -1,4 +1,4 @@
-![MasterHead](https://media-exp1.licdn.com/dms/image/C4D16AQHDNa6ZOH_3xw/profile-displaybackgroundimage-shrink_350_1400/0/1654440982362?e=1672876800&v=beta&t=h1jasaSTEjso54y12GVsFLiUxkH-mT5NR60krbNO2vA)
+![MasterHead](https://drive.google.com/file/d/1iezmrC3-nPKuAVUQpra4i9naEfT17SJ2/view?usp=share_link)
 <h1 align="center">Hey 👋, I'm Kalpit Jain</h1>
 <h3 align="center">A MERN Stack Developer, Blockchain and Java Developer.</h3>
 <img
