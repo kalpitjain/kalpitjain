@@ -13,8 +13,7 @@
   />
 </p>
 
-- 🔭 I’m currently working on
-[Zenoway]
+- 🔭 I’m currently working on Zenoway
 - 🌱 I’m currently
 learning **Open AI ChatGPT and Semantic Kernel** 
 - 💬 Ask me about **MERN, Blockchain and OpenAI** 
