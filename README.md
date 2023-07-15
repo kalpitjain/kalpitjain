@@ -1,4 +1,4 @@
-<h1 align="center">Hey 👋, I'm Kalpit Jain</h1>
+<h1 align="center">Hey 👋,  I'm Kalpit Jain</h1>
 <h3 align="center">Ex-SWE Intern at Microsoft, a MERN Stack Developer and Blockchain.</h3>
 <img
   align="right"
