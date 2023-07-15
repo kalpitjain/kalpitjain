@@ -1,5 +1,5 @@
 <h1 align="center">Hey 👋, I'm Kalpit Jain</h1>
-<h3 align="center">A MERN Stack Developer, Blockchain and Java Developer.</h3>
+<h3 align="center">Ex-SWE Intern at Microsoft, a MERN Stack Developer and Blockchain.</h3>
 <img
   align="right"
   alt="Coding"
@@ -14,10 +14,10 @@
 </p>
 
 - 🔭 I’m currently working on
-[Dossier](https://vtvil-kaaaa-aaaal-qbfjq-cai.raw.ic0.app/) 
+[Zenoway]
 - 🌱 I’m currently
-learning **Solidity and Motoko** 
-- 💬 Ask me about **MERN** 
+learning **Open AI ChatGPT and Semantic Kernel** 
+- 💬 Ask me about **MERN, Blockchain and OpenAI** 
 - 📫 How to reach me **kalpit.jain1810@gmail.com**
 
 <h3 align="left">Connect with me:</h3>
