@@ -1,5 +1,5 @@
 <h1 align="center">Hey 👋,  I'm Kalpit Jain</h1>
-<h3 align="center">Ex-SWE Intern at Microsoft, a MERN Stack Developer and Blockchain.</h3>
+<h3 align="center">SWE Intern'23 at Microsoft, a MERN Stack Developer and Blockchain and AI Application Developer.</h3>
 <img
   align="right"
   alt="Coding"
