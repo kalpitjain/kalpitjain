@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="300" src="https://miro.medium.com/v2/resize:fit:1360/format:webp/1*zVnWJtyGOX_kUIDm6ccCfQ.gif" alt="Coding">
+  <img width="300" src="developer.gif" alt="Coding">
 </p>
 
 <h1 align="center">Hi there! 👋 I'm Kalpit Jain</h1>
