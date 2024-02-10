@@ -78,6 +78,8 @@
 </p>
 
 <hr/>
-<strong align="center">
-  Connect with me, and let's turn ideas into reality! 🚀
-</strong>
+<p>
+  <strong>
+    Connect with me, and let's turn ideas into reality! 🚀
+  </strong>
+</p>
