@@ -78,7 +78,7 @@
 </p>
 
 <hr/>
-<p>
+<p align="center">
   <strong>
     Connect with me, and let's turn ideas into reality! 🚀
   </strong>
