@@ -27,6 +27,7 @@
 
 <h2 align="center">🚀 Technologies & Tools</h2>
 
+<h4 align="center">Programming Languages</h4>
 <p align="center">
   <img src="https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=white" alt="JavaScript">
   <img src="https://img.shields.io/badge/-Java-007396?style=flat-square&logo=java&logoColor=white" alt="Java">
@@ -40,6 +41,7 @@
   <img src="https://img.shields.io/badge/-C-A8B9CC?style=flat-square&logo=c&logoColor=white" alt="C">
 </p>
 
+<h4 align="center">Frameworks/Libraries</h4>
 <p align="center">
   <img src="https://img.shields.io/badge/-React.js-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React.js">
   <img src="https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js">
@@ -50,6 +52,7 @@
   <img src="https://img.shields.io/badge/-Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
 </p>
 
+<h4 align="center">Generative AI</h4>
 <p align="center">
   <img src="https://img.shields.io/badge/-OpenAI-0082C3?style=flat-square&logo=openai&logoColor=white" alt="OpenAI">
   <img src="https://img.shields.io/badge/-Gemini_AI-3F49CC?style=flat-square&logo=gemini-ai&logoColor=white" alt="Gemini AI">
@@ -61,6 +64,7 @@
   <img src="https://img.shields.io/badge/-Semantic_Kernel-6550E9?style=flat-square&logo=semantic-kernel&logoColor=white" alt="Semantic Kernel">
 </p>
 
+<h4 align="center">Technical Competency</h4>
 <p align="center">
   <img src="https://img.shields.io/badge/-Git-F05032?style=flat-square&logo=git&logoColor=white" alt="Git">
   <img src="https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub">
@@ -73,6 +77,7 @@
   <img src="https://img.shields.io/badge/-CodeSandbox-000000?style=flat-square&logo=codesandbox&logoColor=white" alt="CodeSandbox">
 </p>
 
+<hr/>
 <p align="center">
   Connect with me, and let's turn ideas into reality! 🚀
 </p>
