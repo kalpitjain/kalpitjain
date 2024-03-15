@@ -17,7 +17,7 @@
   </a>
 </p>
 
-- 🔭 I’m currently working on **Youtube Co-Pilot**
+- 🔭 I’m currently working on **WebWisdom Buddy**
 - 🌱 I’m currently learning **Generative AI** and **Machine Learning**
 - 🤝 I am happy to discuss about: Data Structures and Algorithms, Programming Languages, Full Stack development, Generative AI, Blockchain, Economics, and Finance.
 - 💬 Ask me anything about my domain, 📚 always ready to help
@@ -80,6 +80,6 @@
 <hr/>
 <p align="center">
   <strong>
-    Connect with me, and let's turn ideas into reality! 🚀
+    Let's Connect and turn ideas into reality! 🚀
   </strong>
 </p>
