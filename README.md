@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">Hi there! 👋 I'm Kalpit Jain</h1>
-<h3 align="center">SWE Intern'23 at Microsoft | Full Stack Web Developer | Generative AI Application Developer</h3>
+<h3 align="center">Engineering Gaming with AI | Full Stack Developer Intern @Bik | Backend Intern @MyShubhLife | SWE Intern'23 @Microsoft | Full Stack Web Developer | Generative AI Application Developer</h3>
 
 <p align="center">
   <a href="https://linkedin.com/in/kalpitjain18/" target="_blank">
@@ -17,7 +17,7 @@
   </a>
 </p>
 
-- 🔭 I’m currently working on **WebWisdom Buddy**
+- 🔭 I’m currently working on **Game Generation using AI**
 - 🌱 I’m currently learning **Generative AI** and **Machine Learning**
 - 🤝 I am happy to discuss about: Data Structures and Algorithms, Programming Languages, Full Stack development, Generative AI, Blockchain, Economics, and Finance.
 - 💬 Ask me anything about my domain, 📚 always ready to help
