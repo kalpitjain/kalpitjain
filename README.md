@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">Hi there! 👋 I'm Kalpit Jain</h1>
-<h3 align="center">Engineering Gaming with AI • SDE @Bik (YC S20) • Ex-Microsoft • Ex-MyShubhLife • 6x Hackathon Winner • Generative AI • MERN Stack • Java</h3>
+<h3 align="center">Software Engineer @Bik (YC S20) • Ex-Microsoft • Ex-MyShubhLife • 7x Hackathon Winner • AI Agent & Full-Stack Developer</h3>
 
 <p align="center">
   <a href="https://linkedin.com/in/kalpitjain18/" target="_blank">
@@ -17,9 +17,9 @@
   </a>
 </p>
 
-- 🔭 I’m currently working on **Game Generation with AI**
-- 🌱 I’m currently learning **Generative AI** and **Machine Learning**
-- 🤝 I am happy to discuss about: Data Structures and Algorithms, Programming Languages, Full Stack development, Generative AI, Blockchain, Economics, and Finance.
+- 🔭 I’m currently working on **Generation AI**
+- 🌱 I’m currently learning **Cloud Computing**
+- 🤝 I am happy to discuss about: Full Stack development, Generative AI, Data Structures and Algorithms, Blockchain, Finance, and Economics.
 - 💬 Ask me anything about my domain, 📚 always ready to help
 - 👨‍💻 All of my projects are available at [GitHub](https://github.com/kalpitjain)
 - 📫 Reach me at **kalpit.jain1810@gmail.com**
