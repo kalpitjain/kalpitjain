@@ -1,16 +1,8 @@
-"""Render the contributions card (dark + light) from the contribution calendar.
+"""Contribution data and the contributions card; composed into the profile by build.py."""
 
-In CI:   GITHUB_TOKEN=... python3 scripts/activity.py --user kalpitjain --out dist
-Locally: python3 scripts/activity.py --calendar days.json --out assets
-         (days.json is a list of {"date": "YYYY-MM-DD", "count": N})
-"""
-
-import argparse
 import json
-import os
 import urllib.request
 from datetime import date, timedelta
-from pathlib import Path
 
 from theme import GAP, PAD, THEMES, W, cell, delay, icon, sublabel, svg
 
@@ -151,30 +143,3 @@ def card(t, s):
     body.append(f'<text x="{lx + 5 * 16 + 4}" y="{legend_y}" font-size="12" fill="{t["muted"]}">More</text>')
 
     return svg(t, W, h, "\n".join(body))
-
-
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--user", default="kalpitjain")
-    ap.add_argument("--calendar", help="JSON file of {date, count} instead of calling the API")
-    ap.add_argument("--out", default="dist")
-    args = ap.parse_args()
-
-    if args.calendar:
-        days = json.loads(Path(args.calendar).read_text())
-    else:
-        token = os.environ.get("GITHUB_TOKEN")
-        if not token:
-            raise SystemExit("Set GITHUB_TOKEN or pass --calendar")
-        days = fetch_calendar(args.user, token)
-
-    stats = summarize(days)
-    out = Path(args.out)
-    out.mkdir(parents=True, exist_ok=True)
-    for theme, tokens in THEMES.items():
-        (out / f"activity-{theme}.svg").write_text(card(tokens, stats))
-    print(f"total={stats['total']} current={stats['current']} longest={stats['longest']} -> {out}")
-
-
-if __name__ == "__main__":
-    main()

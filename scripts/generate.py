@@ -1,6 +1,6 @@
-"""Generate the README's static graphics (dark + light) in ../assets.
+"""README sections (used by build.py) and the link buttons (written to ../assets).
 
-Run: python3 scripts/generate.py
+Run: python3 scripts/generate.py   # rewrites the buttons; build.py renders the cards
 """
 
 from pathlib import Path
@@ -56,14 +56,14 @@ def typewriter(t, cx, y, size):
     ]
     for p, (start, end) in zip(PHRASES, spans):
         out.append(
-            f'<text class="mono" x="{cx}" y="{y}" font-size="{size}" text-anchor="middle" fill="{t["primary"]}" '
+            f'<text class="mono" x="{cx}" y="{y}" font-size="{size}" text-anchor="middle" fill="{t["muted"]}" '
             f'textLength="{len(p) * cw:.1f}" lengthAdjust="spacingAndGlyphs" opacity="0">{escape(p)}'
             f'<animate attributeName="opacity" dur="{total:.2f}s" repeatCount="indefinite" calcMode="discrete" '
             f'keyTimes="0;{start / total:.5f};{end / total:.5f};1" values="0;1;0;0"/></text>'
         )
     out.append("</g>")
     out.append(
-        f'<rect class="cursor" y="{y - size * 0.82:.1f}" width="2.5" height="{size * 1.02:.1f}" rx="1" fill="{t["primary"]}">'
+        f'<rect class="cursor" y="{y - size * 0.82:.1f}" width="2.5" height="{size * 1.02:.1f}" rx="1" fill="{t["green"]}">'
         f'<animate attributeName="x" {anim} values="{cursor_x}"/></rect>'
     )
     return "\n".join(out)
@@ -129,11 +129,11 @@ def text_w(text, size, weight=400):
 
 
 def gh_label(t, x, y, text, size=12.5):
-    """Primer Label: outlined pill in the accent colour."""
+    """Primer Label: neutral outlined pill."""
     w = text_w(text, size, 500) + 22
     return w, (
-        f'<rect x="{x + .5:.1f}" y="{y + .5}" width="{w - 1:.1f}" height="27" rx="13.5" stroke="{t["primary"]}" stroke-opacity=".55"/>'
-        f'<text x="{x + w / 2:.1f}" y="{y + 18.5}" font-size="{size}" font-weight="500" text-anchor="middle" fill="{t["primary"]}">{text}</text>'
+        f'<rect x="{x + .5:.1f}" y="{y + .5}" width="{w - 1:.1f}" height="27" rx="13.5" stroke="{t["border"]}"/>'
+        f'<text x="{x + w / 2:.1f}" y="{y + 18.5}" font-size="{size}" font-weight="500" text-anchor="middle" fill="{t["muted"]}">{text}</text>'
     )
 
 
@@ -146,7 +146,7 @@ def bento_about(t):
         cell(t, 0, 0, aw, h),
         heading(t, PAD, 46, "About", "sparkles"),
         f'<text x="{PAD}" y="94" font-size="24" font-weight="600" letter-spacing="-.3" fill="{t["fg"]}">I approach software the way</text>',
-        f'<text x="{PAD}" y="124" font-size="24" font-weight="600" letter-spacing="-.3" fill="{t["primary"]}">a scientist approaches the world.</text>',
+        f'<text x="{PAD}" y="124" font-size="24" font-weight="600" letter-spacing="-.3" fill="{t["muted"]}">a scientist approaches the world.</text>',
     ]
     for i, line in enumerate(ABOUT):
         body.append(f'<text x="{PAD}" y="{164 + i * 23}" font-size="15" fill="{t["muted"]}">{escape(line)}</text>')
@@ -175,7 +175,7 @@ def bento_about(t):
         f'<circle class="pulse" cx="{nx + nw - PAD - 4}" cy="41" r="4.5" fill="{t["green"]}"/>',
         f'<circle cx="{nx + nw - PAD - 4}" cy="41" r="4.5" fill="{t["green"]}"/>',
         f'<text x="{nx + PAD}" y="92" font-size="21" font-weight="600" fill="{t["fg"]}">Software Engineer II</text>',
-        f'<text x="{nx + PAD}" y="117" font-size="15" font-weight="600" fill="{t["primary"]}">Bik.AI <tspan fill="{t["muted"]}" font-weight="400">· YC S20 · Bengaluru</tspan></text>',
+        f'<text x="{nx + PAD}" y="117" font-size="15" font-weight="600" fill="{t["fg"]}">Bik.AI <tspan fill="{t["muted"]}" font-weight="400">· YC S20 · Bengaluru</tspan></text>',
         f'<line x1="{nx + PAD}" y1="140" x2="{nx + nw - PAD}" y2="140" stroke="{t["border"]}"/>',
         sublabel(t, nx + PAD, 170, "Previously"),
     ]
@@ -272,12 +272,12 @@ TAG_H, TAG_GAP, TAG_FS = 32, 8, 13
 
 
 def tag(t, x, y, kind, glyph, name):
-    """Primer topic tag: accent-subtle pill with accent text."""
+    """Neutral tag pill with a muted logo."""
     w = 36 + text_w(name, TAG_FS, 500) + 14
-    mark = brand(glyph, x + 12, y + 9, 14, t["primary"]) if kind == "brand" else icon(glyph, x + 11, y + 8, 16, t["primary"])
+    mark = brand(glyph, x + 12, y + 9, 14, t["muted"]) if kind == "brand" else icon(glyph, x + 11, y + 8, 16, t["muted"])
     return w, (
-        f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="{TAG_H}" rx="{TAG_H / 2}" fill="{t["primary_soft"]}"/>' + mark +
-        f'<text x="{x + 33:.1f}" y="{y + 21}" font-size="{TAG_FS}" font-weight="500" fill="{t["primary"]}">{escape(name)}</text>'
+        f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="{TAG_H}" rx="{TAG_H / 2}" fill="{t["tag_bg"]}" stroke="{t["border"]}"/>' + mark +
+        f'<text x="{x + 33:.1f}" y="{y + 21}" font-size="{TAG_FS}" font-weight="500" fill="{t["fg"]}">{escape(name)}</text>'
     )
 
 
@@ -312,13 +312,14 @@ def toolbox(t):
 
 
 def signoff(t):
-    h = 140
+    """Closing thought, phrased in first person the way the portfolio uses it."""
+    h = 120
     body = [
         cell(t, 0, 0, W, h),
-        icon("quote", W / 2 - 12, 26, 24, t["muted"]),
-        f'<text class="rise" {delay(0)} x="{W / 2}" y="86" font-size="20" font-style="italic" text-anchor="middle" fill="{t["fg"]}">'
-        "The best solutions come from understanding the world beyond the screen.</text>",
-        f'<text class="rise" {delay(1)} x="{W / 2}" y="114" font-size="13" text-anchor="middle" fill="{t["muted"]}">— Kalpit Jain</text>',
+        f'<text class="rise" {delay(0)} x="{W / 2}" y="54" font-size="16" text-anchor="middle" fill="{t["muted"]}">'
+        "Reading, travel, and photography keep me grounded. They remind me that</text>",
+        f'<text class="rise" {delay(1)} x="{W / 2}" y="82" font-size="16" font-weight="600" text-anchor="middle" fill="{t["fg"]}">'
+        "the best solutions come from understanding the world beyond the screen.</text>",
     ]
     return svg(t, W, h, "\n".join(body))
 
@@ -327,18 +328,10 @@ def main():
     OUT.mkdir(exist_ok=True)
     for old in OUT.glob("*.svg"):
         old.unlink()
-    pages = {
-        "banner": banner,
-        "about": bento_about,
-        "highlights": bento_highlights,
-        "toolbox": toolbox,
-        "signoff": signoff,
-        **{f"btn-{k}": (lambda t, v=v: button(t, *v)) for k, v in BUTTONS.items()},
-    }
-    for name, render in pages.items():
+    for key, spec in BUTTONS.items():
         for theme, tokens in THEMES.items():
-            (OUT / f"{name}-{theme}.svg").write_text(render(tokens))
-    print(f"Wrote {len(pages) * len(THEMES)} files to {OUT}")
+            (OUT / f"btn-{key}-{theme}.svg").write_text(button(tokens, *spec))
+    print(f"Wrote {len(BUTTONS) * len(THEMES)} buttons to {OUT}")
 
 
 if __name__ == "__main__":

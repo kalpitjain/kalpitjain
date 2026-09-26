@@ -17,7 +17,7 @@ MONO = "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mo
 _icons = json.loads((Path(__file__).parent / "icons.json").read_text())
 BRANDS, LUCIDE = _icons["brands"], _icons["lucide"]
 
-# Primer functional colours (github.com light / dark default).
+# Primer functional colours (github.com light / dark default): neutral greys, green as the one accent.
 THEMES = {
     "dark": {
         "fg": "#f0f6fc",
@@ -26,8 +26,7 @@ THEMES = {
         "border": "#3d444d",
         "card": "rgba(110,118,129,0.035)",
         "btn": "#212830",
-        "primary": "#4493f8",
-        "primary_soft": "rgba(56,139,253,0.15)",
+        "tag_bg": "rgba(110,118,129,0.10)",
         "green": "#3fb950",
         "heat": ["rgba(110,118,129,0.14)", "#033a16", "#196c2e", "#2ea043", "#56d364"],
     },
@@ -38,8 +37,7 @@ THEMES = {
         "border": "#d1d9e0",
         "card": "rgba(208,215,222,0.08)",
         "btn": "#f6f8fa",
-        "primary": "#0969da",
-        "primary_soft": "#ddf4ff",
+        "tag_bg": "#f6f8fa",
         "green": "#1a7f37",
         "heat": ["#eff2f5", "#aceebb", "#4ac26b", "#2da44e", "#116329"],
     },
