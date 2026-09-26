@@ -15,8 +15,13 @@ import re
 from pathlib import Path
 
 import activity
-from generate import banner, bento_about, bento_highlights, signoff, toolbox
+from generate import banner, bento_about, bento_highlights, toolbox
 from theme import BASE_CSS, GAP, THEMES, W
+
+# Space left under the last card. GitHub adds only a ~6px inline gap between this image
+# and the link buttons, so this tops it up to match the card gutter (GAP scaled to the
+# ~850px README width is ~20px; 16 units + 6px lands on the same).
+BOTTOM = 16
 
 
 def parts(markup):
@@ -35,7 +40,6 @@ def compose(t, stats):
         bento_highlights(t),
         toolbox(t),
         activity.card(t, stats),
-        signoff(t),
     ]
     y, css, defs, bodies = 0.0, [], [], []
     for markup in sections:
@@ -44,7 +48,7 @@ def compose(t, stats):
         defs.append(extra_defs)
         bodies.append(f'<g transform="translate(0 {y:.1f})">\n{body}\n</g>')
         y += h + GAP
-    height = y - GAP
+    height = y - GAP + BOTTOM
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{height:.0f}" '
         f'viewBox="0 0 {W} {height:.0f}" fill="none">\n'

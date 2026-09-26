@@ -308,22 +308,6 @@ def toolbox(t):
     return svg(t, W, h, "\n".join(header + body))
 
 
-# ── Sign-off ───────────────────────────────────────────────────────────
-
-
-def signoff(t):
-    """Closing thought, phrased in first person the way the portfolio uses it."""
-    h = 120
-    body = [
-        cell(t, 0, 0, W, h),
-        f'<text class="rise" {delay(0)} x="{W / 2}" y="54" font-size="16" text-anchor="middle" fill="{t["muted"]}">'
-        "Reading, travel, and photography keep me grounded. They remind me that</text>",
-        f'<text class="rise" {delay(1)} x="{W / 2}" y="82" font-size="16" font-weight="600" text-anchor="middle" fill="{t["fg"]}">'
-        "the best solutions come from understanding the world beyond the screen.</text>",
-    ]
-    return svg(t, W, h, "\n".join(body))
-
-
 def main():
     OUT.mkdir(exist_ok=True)
     for old in OUT.glob("*.svg"):
