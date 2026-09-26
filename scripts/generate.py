@@ -6,7 +6,7 @@ Run: python3 scripts/generate.py   # rewrites the buttons; build.py renders the 
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-from theme import GAP, PAD, THEMES, W, brand, cell, delay, graph_backdrop, heading, icon, sublabel, svg
+from theme import GAP, PAD, THEMES, W, brand, brand_color, cell, delay, graph_backdrop, heading, icon, sublabel, svg
 
 OUT = Path(__file__).resolve().parent.parent / "assets"
 
@@ -78,7 +78,7 @@ def banner(t):
         f'<text class="rise" {delay(1)} x="{cx}" y="134" font-size="64" font-weight="700" letter-spacing="-1.5" text-anchor="middle" fill="{t["fg"]}">Kalpit Jain</text>',
         f'<g class="rise" {delay(2)}>{typewriter(t, cx, 182, 20)}</g>',
         f'<g class="rise" {delay(3)} font-size="14" fill="{t["muted"]}">',
-        icon("map-pin", cx - 64, 208, 16, t["muted"]),
+        icon("location", cx - 64, 208, 16, t["muted"]),
         f'<text x="{cx - 42}" y="221">Bengaluru, India</text>',
         "</g>",
     ]
@@ -98,7 +98,7 @@ BUTTONS = {
 def button(t, kind, glyph, text):
     h = 40
     w = round(44 + text_w(text, 14, 600) + 18)
-    mark = icon(glyph, 16, 12, 16, t["muted"]) if kind == "icon" else brand(glyph, 16, 12, 16, t["muted"])
+    mark = icon(glyph, 16, 12, 16, t["muted"]) if kind == "icon" else brand(glyph, 16, 12, 16, t["fg"])
     body = (
         f'<rect x=".5" y=".5" width="{w - 1}" height="{h - 1}" rx="8" fill="{t["btn"]}" stroke="{t["border"]}"/>'
         + mark
@@ -144,7 +144,7 @@ def bento_about(t):
     body = [
         f'<g class="rise" {delay(0)}>',
         cell(t, 0, 0, aw, h),
-        heading(t, PAD, 46, "About", "sparkles"),
+        heading(t, PAD, 46, "About", "person"),
         f'<text x="{PAD}" y="94" font-size="24" font-weight="600" letter-spacing="-.3" fill="{t["fg"]}">I approach software the way</text>',
         f'<text x="{PAD}" y="124" font-size="24" font-weight="600" letter-spacing="-.3" fill="{t["muted"]}">a scientist approaches the world.</text>',
     ]
@@ -163,7 +163,7 @@ def bento_about(t):
 
     body += [
         f'<line x1="{PAD}" y1="282" x2="{aw - PAD}" y2="282" stroke="{t["border"]}"/>',
-        icon("zap", PAD, 294, 15, t["muted"]),
+        icon("zap", PAD, 294, 16, t["muted"]),
         f'<text x="{PAD + 24}" y="306" font-size="13" fill="{t["muted"]}"><tspan fill="{t["fg"]}" font-weight="600">Focus</tspan>  {escape(FOCUS)}</text>',
         "</g>",
     ]
@@ -197,11 +197,11 @@ def bento_about(t):
 
 # ── Row 2: Highlights + Off-screen ─────────────────────────────────────
 
-STATS = [("trophy", "7×", "Hackathon wins", "across AI and Web3"), ("code", "3+", "Years building", "AI into real products")]
+STATS = [("trophy", "7×", "Hackathon wins", "across AI and Web3"), ("history", "3+", "Years building", "AI into real products")]
 OFFSCREEN = [
-    ("book-open", "Reading", "finance, economics, politics & history"),
-    ("plane", "Travel", "seeing how other places work"),
-    ("camera", "Photography", "slowing down to notice the details"),
+    ("book", "Reading", "finance, economics, politics & history"),
+    ("globe", "Travel", "seeing how other places work"),
+    ("device-camera", "Photography", "slowing down to notice the details"),
 ]
 
 
@@ -226,7 +226,7 @@ def bento_highlights(t):
     body += [
         f'<g class="rise" {delay(2)}>',
         cell(t, ox, 0, ow, h),
-        heading(t, ox + PAD, 46, "Off-screen", "sparkles"),
+        heading(t, ox + PAD, 46, "Off-screen", "heart"),
         sublabel(t, ox + ow - PAD, 46, "What keeps me grounded", "end"),
     ]
     for i, (ic, title, sub) in enumerate(OFFSCREEN):
@@ -258,9 +258,9 @@ TOOLS = [
         ("brand", "redis", "Redis"), ("brand", "firebase", "Firestore"),
     ]),
     ("AI & search", [
-        ("icon", "search", "RAG"), ("brand", "langchain", "LangChain"), ("icon", "brain", "Semantic Kernel"),
+        ("icon", "search", "RAG"), ("brand", "langchain", "LangChain"), ("icon", "cpu", "Semantic Kernel"),
         ("brand", "elasticsearch", "Elasticsearch"), ("brand", "qdrant", "Qdrant"),
-        ("icon", "message-square-text", "Prompt Engineering"), ("brand", "openai", "OpenAI"), ("brand", "googlegemini", "Gemini"),
+        ("icon", "comment-discussion", "Prompt Engineering"), ("brand", "openai", "OpenAI"), ("brand", "googlegemini", "Gemini"),
     ]),
     ("Infra & cloud", [
         ("brand", "docker", "Docker"), ("brand", "googlecloud", "GCP"), ("brand", "githubactions", "GitHub Actions"),
@@ -274,7 +274,7 @@ TAG_H, TAG_GAP, TAG_FS = 32, 8, 13
 def tag(t, x, y, kind, glyph, name):
     """Neutral tag pill with a muted logo."""
     w = 36 + text_w(name, TAG_FS, 500) + 14
-    mark = brand(glyph, x + 12, y + 9, 14, t["muted"]) if kind == "brand" else icon(glyph, x + 11, y + 8, 16, t["muted"])
+    mark = brand(glyph, x + 11, y + 8, 16, brand_color(t, glyph)) if kind == "brand" else icon(glyph, x + 11, y + 8, 16, t["muted"])
     return w, (
         f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="{TAG_H}" rx="{TAG_H / 2}" fill="{t["tag_bg"]}" stroke="{t["border"]}"/>' + mark +
         f'<text x="{x + 33:.1f}" y="{y + 21}" font-size="{TAG_FS}" font-weight="500" fill="{t["fg"]}">{escape(name)}</text>'
@@ -302,7 +302,7 @@ def toolbox(t):
     h = y + 4
     header = [
         cell(t, 0, 0, W, h),
-        heading(t, PAD, 46, "Toolbox", "code"),
+        heading(t, PAD, 46, "Toolbox", "tools"),
         sublabel(t, W - PAD, 46, "What I build with", "end"),
     ]
     return svg(t, W, h, "\n".join(header + body))

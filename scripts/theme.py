@@ -15,7 +15,7 @@ SANS = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, A
 MONO = "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace"
 
 _icons = json.loads((Path(__file__).parent / "icons.json").read_text())
-BRANDS, LUCIDE = _icons["brands"], _icons["lucide"]
+BRANDS, BRAND_HEX, OCTICONS = _icons["brands"], _icons["brand_hex"], _icons["octicons"]
 
 # Primer functional colours (github.com light / dark default): neutral greys, green as the one accent.
 THEMES = {
@@ -68,11 +68,41 @@ def svg(t, width, height, body, css="", defs=""):
     )
 
 
-def icon(name, x, y, size, color, width=2):
+def icon(name, x, y, size, color):
+    """Octicon (GitHub's own icon set, 16px grid), filled."""
     return (
-        f'<g transform="translate({x:.1f} {y:.1f}) scale({size / 24})" stroke="{color}" stroke-width="{width}" '
-        f'stroke-linecap="round" stroke-linejoin="round" fill="none">{LUCIDE[name]}</g>'
+        f'<g transform="translate({x:.1f} {y:.1f}) scale({size / 16})" fill="{color}">{OCTICONS[name]}</g>'
     )
+
+
+def _luminance(hex_):
+    r, g, b = (int(hex_[i : i + 2], 16) / 255 for i in (0, 2, 4))
+    lin = lambda c: c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
+
+
+def _mix(hex_, toward, amount):
+    rgb = [int(hex_[i : i + 2], 16) for i in (0, 2, 4)]
+    return "".join(f"{round(c + (toward - c) * amount):02x}" for c in rgb)
+
+
+def brand_color(t, slug):
+    """Official brand colour, nudged just enough to stay legible on the theme's background.
+
+    Near-black logos (Next.js, Vercel, Java, …) use the text colour in dark mode; other dark
+    brand colours are lightened step by step, keeping their hue.
+    """
+    hex_ = BRAND_HEX[slug]
+    if t is THEMES["dark"]:
+        if _luminance(hex_) < 0.02:
+            return t["fg"]
+        for step in range(10):
+            if _luminance(hex_) >= 0.16:
+                break
+            hex_ = _mix(hex_, 255, 0.15)
+    elif _luminance(hex_) > 0.85:
+        return t["fg"]
+    return f"#{hex_}"
 
 
 def brand(name, x, y, size, color, opacity=1):
