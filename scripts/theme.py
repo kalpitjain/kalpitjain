@@ -1,4 +1,8 @@
-"""Shared look for the README graphics: kalpitjain.dev's navy + blue palette."""
+"""Shared look for the README graphics: kalpitjain.dev's navy + blue palette.
+
+Surfaces are translucent so the cards take on whatever GitHub theme is behind them
+(light, dark, or dark dimmed) instead of painting a slightly different solid colour.
+"""
 
 import json
 from pathlib import Path
@@ -14,36 +18,36 @@ BRANDS, LUCIDE = _icons["brands"], _icons["lucide"]
 
 THEMES = {
     "dark": {
-        "bg": "#080c16",
-        "card": "#0e1522",
-        "card_hi": "#131c2d",
+        "bg": "rgba(59,130,246,0.035)",
+        "card": "rgba(255,255,255,0.015)",
+        "card_hi": "rgba(255,255,255,0.05)",
         "fg": "#eef2f7",
         "muted": "#8a99ad",
         "faint": "#5d6b80",
-        "border": "#223049",
+        "border": "rgba(255,255,255,0.11)",
         "primary": "#3b82f6",
-        "primary_soft": "#12203a",
+        "primary_soft": "rgba(59,130,246,0.15)",
         "shine": "#93c5fd",
         "green": "#34d399",
         "glow": 0.22,
         "blob": 1.0,
-        "heat": ["#1b2436", "#1c3366", "#1e40af", "#2f6fe8", "#7cb4fb"],
+        "heat": ["rgba(255,255,255,0.07)", "rgba(59,130,246,0.35)", "#1e40af", "#2f6fe8", "#7cb4fb"],
     },
     "light": {
-        "bg": "#f4f6fa",
-        "card": "#ffffff",
-        "card_hi": "#f7f9fd",
+        "bg": "rgba(59,130,246,0.035)",
+        "card": "rgba(59,130,246,0.012)",
+        "card_hi": "rgba(59,130,246,0.045)",
         "fg": "#121826",
         "muted": "#58606f",
         "faint": "#8b95a5",
-        "border": "#d9e0ea",
+        "border": "rgba(31,35,40,0.12)",
         "primary": "#3b82f6",
-        "primary_soft": "#e8f0fe",
+        "primary_soft": "rgba(59,130,246,0.10)",
         "shine": "#1d4ed8",
         "green": "#10b981",
         "glow": 0.12,
         "blob": 0.5,
-        "heat": ["#e9eef6", "#c7dbfd", "#93c5fd", "#3b82f6", "#1d4ed8"],
+        "heat": ["rgba(31,35,40,0.07)", "#c7dbfd", "#93c5fd", "#3b82f6", "#1d4ed8"],
     },
 }
 
