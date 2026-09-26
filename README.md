@@ -31,8 +31,8 @@
 </picture>
 
 <p align="center">
-  <a href="https://kalpitjain.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-portfolio-dark.svg"><img src="assets/btn-portfolio-light.svg" alt="kalpitjain.dev" height="44"></picture></a>&nbsp;
-  <a href="https://www.linkedin.com/in/kalpitjain18/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-linkedin-dark.svg"><img src="assets/btn-linkedin-light.svg" alt="LinkedIn" height="44"></picture></a>&nbsp;
-  <a href="https://leetcode.com/kalpit_jain"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-leetcode-dark.svg"><img src="assets/btn-leetcode-light.svg" alt="LeetCode" height="44"></picture></a>&nbsp;
-  <a href="mailto:kalpitjain1814@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-email-dark.svg"><img src="assets/btn-email-light.svg" alt="Email" height="44"></picture></a>
+  <a href="https://kalpitjain.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-portfolio-dark.svg"><img src="assets/btn-portfolio-light.svg" alt="kalpitjain.dev" height="40"></picture></a>&nbsp;
+  <a href="https://www.linkedin.com/in/kalpitjain18/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-linkedin-dark.svg"><img src="assets/btn-linkedin-light.svg" alt="LinkedIn" height="40"></picture></a>&nbsp;
+  <a href="https://leetcode.com/kalpit_jain"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-leetcode-dark.svg"><img src="assets/btn-leetcode-light.svg" alt="LeetCode" height="40"></picture></a>&nbsp;
+  <a href="mailto:kalpitjain1814@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-email-dark.svg"><img src="assets/btn-email-light.svg" alt="Email" height="40"></picture></a>
 </p>

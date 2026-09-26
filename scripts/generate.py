@@ -6,7 +6,7 @@ Run: python3 scripts/generate.py
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-from theme import GAP, THEMES, W, backdrop, brand, cell, delay, icon, label, svg
+from theme import GAP, PAD, THEMES, W, brand, cell, delay, graph_backdrop, heading, icon, sublabel, svg
 
 OUT = Path(__file__).resolve().parent.parent / "assets"
 
@@ -70,30 +70,22 @@ def typewriter(t, cx, y, size):
 
 
 def banner(t):
-    h, cx = 270, W / 2
-    defs, back = backdrop(
-        t, h, 22,
-        [
-            ("d1", 150, 40, 150, t["primary"], 0.4),
-            ("d2", 860, 250, 160, "#60a5fa", 0.3),
-            ("d1", 520, 290, 110, "#1d4ed8", 0.22),
-        ],
-    )
+    h, cx = 260, W / 2
     css = ".cursor { animation: blink 1s step-end infinite; }"
     body = [
-        back,
-        f'<text class="mono rise" {delay(0)} x="{cx}" y="62" font-size="14" letter-spacing="3" text-anchor="middle" fill="{t["muted"]}">HELLO, WORLD — I\'M</text>',
-        f'<text class="rise" {delay(1)} x="{cx}" y="134" font-size="72" font-weight="800" letter-spacing="-2" text-anchor="middle" fill="url(#shimmer)">Kalpit Jain</text>',
-        f'<g class="rise" {delay(2)}>{typewriter(t, cx, 186, 21)}</g>',
-        f'<g class="rise" {delay(3)} font-size="14.5" fill="{t["muted"]}">',
-        icon("map-pin", cx - 66, 218, 16, t["muted"]),
-        f'<text x="{cx - 44}" y="231">Bengaluru, India</text>',
+        graph_backdrop(t, W, h),
+        f'<text class="rise" {delay(0)} x="{cx}" y="70" font-size="18" text-anchor="middle" fill="{t["muted"]}">Hi there, I\'m</text>',
+        f'<text class="rise" {delay(1)} x="{cx}" y="134" font-size="64" font-weight="700" letter-spacing="-1.5" text-anchor="middle" fill="{t["fg"]}">Kalpit Jain</text>',
+        f'<g class="rise" {delay(2)}>{typewriter(t, cx, 182, 20)}</g>',
+        f'<g class="rise" {delay(3)} font-size="14" fill="{t["muted"]}">',
+        icon("map-pin", cx - 64, 208, 16, t["muted"]),
+        f'<text x="{cx - 42}" y="221">Bengaluru, India</text>',
         "</g>",
     ]
-    return svg(t, W, h, "\n".join(body), css, defs)
+    return svg(t, W, h, "\n".join(body), css)
 
 
-# ── Link buttons ───────────────────────────────────────────────────────
+# ── Link buttons (GitHub .btn) ─────────────────────────────────────────
 
 BUTTONS = {
     "portfolio": ("icon", "globe", "kalpitjain.dev"),
@@ -104,18 +96,18 @@ BUTTONS = {
 
 
 def button(t, kind, glyph, text):
-    h = 44
-    w = round(52 + len(text) * 8.1 + 20)
-    mark = icon(glyph, 18, 13, 18, t["primary"]) if kind == "icon" else brand(glyph, 19, 14, 16, t["primary"])
+    h = 40
+    w = round(44 + text_w(text, 14, 600) + 18)
+    mark = icon(glyph, 16, 12, 16, t["muted"]) if kind == "icon" else brand(glyph, 16, 12, 16, t["muted"])
     body = (
-        cell(0, 0, w, h, rx=h / 2, glow="tl")
+        f'<rect x=".5" y=".5" width="{w - 1}" height="{h - 1}" rx="8" fill="{t["btn"]}" stroke="{t["border"]}"/>'
         + mark
-        + f'<text x="46" y="27.5" font-size="14.5" font-weight="600" fill="{t["fg"]}">{escape(text)}</text>'
+        + f'<text x="42" y="25" font-size="14" font-weight="600" fill="{t["fg"]}">{escape(text)}</text>'
     )
     return svg(t, w, h, body)
 
 
-# ── Bento row 1: About + Now ───────────────────────────────────────────
+# ── Row 1: About + Now ─────────────────────────────────────────────────
 
 ABOUT = [
     "Every system starts as a question. I find where work is still",
@@ -136,70 +128,74 @@ def text_w(text, size, weight=400):
     return ((len(text) - narrow - wide) * avg + narrow * 0.3 + wide * 0.85) * size
 
 
+def gh_label(t, x, y, text, size=12.5):
+    """Primer Label: outlined pill in the accent colour."""
+    w = text_w(text, size, 500) + 22
+    return w, (
+        f'<rect x="{x + .5:.1f}" y="{y + .5}" width="{w - 1:.1f}" height="27" rx="13.5" stroke="{t["primary"]}" stroke-opacity=".55"/>'
+        f'<text x="{x + w / 2:.1f}" y="{y + 18.5}" font-size="{size}" font-weight="500" text-anchor="middle" fill="{t["primary"]}">{text}</text>'
+    )
+
+
 def bento_about(t):
-    h = 340
+    h = 330
     aw = 604
     nx, nw = aw + GAP, W - aw - GAP
     body = [
         f'<g class="rise" {delay(0)}>',
-        cell(0, 0, aw, h, glow="tl"),
-        label(t, 32, 44, "ABOUT", "sparkles"),
-        f'<text x="32" y="90" font-size="26" font-weight="800" letter-spacing="-.5" fill="{t["fg"]}">I approach software the way</text>',
-        f'<text x="32" y="122" font-size="26" font-weight="800" letter-spacing="-.5" fill="url(#shimmer)">a scientist approaches the world.</text>',
+        cell(t, 0, 0, aw, h),
+        heading(t, PAD, 46, "About", "sparkles"),
+        f'<text x="{PAD}" y="94" font-size="24" font-weight="600" letter-spacing="-.3" fill="{t["fg"]}">I approach software the way</text>',
+        f'<text x="{PAD}" y="124" font-size="24" font-weight="600" letter-spacing="-.3" fill="{t["primary"]}">a scientist approaches the world.</text>',
     ]
     for i, line in enumerate(ABOUT):
-        body.append(f'<text x="32" y="{164 + i * 23}" font-size="15" fill="{t["muted"]}">{escape(line)}</text>')
+        body.append(f'<text x="{PAD}" y="{164 + i * 23}" font-size="15" fill="{t["muted"]}">{escape(line)}</text>')
 
     # observe → question → experiment → refine
-    x, y = 32, 236
+    x, y = PAD, 230
     for i, step in enumerate(METHOD):
-        w = text_w(step, 13, 600) + 28
-        body += [
-            f'<g class="rise" {delay(i, 0.12, 0.5)}>',
-            f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="32" rx="16" fill="{t["primary_soft"]}" stroke="{t["primary"]}" stroke-opacity=".3"/>',
-            f'<text class="mono" x="{x + w / 2:.1f}" y="{y + 20.5}" font-size="13" font-weight="600" text-anchor="middle" fill="{t["primary"]}">{step}</text>',
-            "</g>",
-        ]
+        w, markup = gh_label(t, x, y, step)
+        body.append(f'<g class="rise" {delay(i, 0.1, 0.4)}>{markup}</g>')
         x += w
         if i < len(METHOD) - 1:
-            body.append(icon("chevron-right", x + 5, y + 8, 16, t["faint"]))
-            x += 26
+            body.append(icon("chevron-right", x + 4, y + 6, 16, t["faint"]))
+            x += 24
 
     body += [
-        f'<line x1="32" y1="290" x2="{aw - 32}" y2="290" stroke="{t["border"]}"/>',
-        icon("zap", 32, 303, 15, t["primary"]),
-        f'<text x="56" y="315" font-size="13" fill="{t["muted"]}"><tspan fill="{t["fg"]}" font-weight="600">Focus</tspan>  {escape(FOCUS)}</text>',
+        f'<line x1="{PAD}" y1="282" x2="{aw - PAD}" y2="282" stroke="{t["border"]}"/>',
+        icon("zap", PAD, 294, 15, t["muted"]),
+        f'<text x="{PAD + 24}" y="306" font-size="13" fill="{t["muted"]}"><tspan fill="{t["fg"]}" font-weight="600">Focus</tspan>  {escape(FOCUS)}</text>',
         "</g>",
     ]
 
     body += [
         f'<g class="rise" {delay(1)}>',
-        cell(nx, 0, nw, h, glow="br"),
-        label(t, nx + 30, 44, "NOW", "briefcase"),
-        f'<circle class="pulse" cx="{nx + nw - 36}" cy="40" r="5" fill="{t["green"]}"/>',
-        f'<circle cx="{nx + nw - 36}" cy="40" r="5" fill="{t["green"]}"/>',
-        f'<text x="{nx + 30}" y="90" font-size="23" font-weight="800" letter-spacing="-.4" fill="{t["fg"]}">Software Engineer II</text>',
-        f'<text x="{nx + 30}" y="116" font-size="16" font-weight="600" fill="{t["primary"]}">Bik.AI <tspan fill="{t["muted"]}" font-weight="400">· YC S20 · Bengaluru</tspan></text>',
-        f'<line x1="{nx + 30}" y1="142" x2="{nx + nw - 30}" y2="142" stroke="{t["border"]}"/>',
-        label(t, nx + 30, 172, "PREVIOUSLY"),
+        cell(t, nx, 0, nw, h),
+        heading(t, nx + PAD, 46, "Now", "briefcase"),
+        f'<circle class="pulse" cx="{nx + nw - PAD - 4}" cy="41" r="4.5" fill="{t["green"]}"/>',
+        f'<circle cx="{nx + nw - PAD - 4}" cy="41" r="4.5" fill="{t["green"]}"/>',
+        f'<text x="{nx + PAD}" y="92" font-size="21" font-weight="600" fill="{t["fg"]}">Software Engineer II</text>',
+        f'<text x="{nx + PAD}" y="117" font-size="15" font-weight="600" fill="{t["primary"]}">Bik.AI <tspan fill="{t["muted"]}" font-weight="400">· YC S20 · Bengaluru</tspan></text>',
+        f'<line x1="{nx + PAD}" y1="140" x2="{nx + nw - PAD}" y2="140" stroke="{t["border"]}"/>',
+        sublabel(t, nx + PAD, 170, "Previously"),
     ]
     for i, (org, role) in enumerate(PREVIOUSLY):
-        y = 200 + i * 26
+        y = 196 + i * 25
         body += [
-            f'<text x="{nx + 30}" y="{y}" font-size="15.5" font-weight="600" fill="{t["fg"]}">{org}</text>',
-            f'<text x="{nx + nw - 30}" y="{y}" font-size="13.5" text-anchor="end" fill="{t["muted"]}">{role}</text>',
+            f'<text x="{nx + PAD}" y="{y}" font-size="15" font-weight="600" fill="{t["fg"]}">{org}</text>',
+            f'<text x="{nx + nw - PAD}" y="{y}" font-size="13.5" text-anchor="end" fill="{t["muted"]}">{role}</text>',
         ]
     body += [
-        f'<line x1="{nx + 30}" y1="252" x2="{nx + nw - 30}" y2="252" stroke="{t["border"]}"/>',
-        label(t, nx + 30, 282, "EDUCATION"),
-        f'<text x="{nx + 30}" y="310" font-size="15.5" font-weight="600" fill="{t["fg"]}">B.Tech, Computer Science</text>',
-        f'<text x="{nx + nw - 30}" y="310" font-size="13.5" text-anchor="end" fill="{t["muted"]}">JECRC · 2024</text>',
+        f'<line x1="{nx + PAD}" y1="244" x2="{nx + nw - PAD}" y2="244" stroke="{t["border"]}"/>',
+        sublabel(t, nx + PAD, 274, "Education"),
+        f'<text x="{nx + PAD}" y="300" font-size="15" font-weight="600" fill="{t["fg"]}">B.Tech, Computer Science</text>',
+        f'<text x="{nx + nw - PAD}" y="300" font-size="13.5" text-anchor="end" fill="{t["muted"]}">JECRC · 2024</text>',
         "</g>",
     ]
     return svg(t, W, h, "\n".join(body))
 
 
-# ── Bento row 2: Highlights + Off-screen ───────────────────────────────
+# ── Row 2: Highlights + Off-screen ─────────────────────────────────────
 
 STATS = [("trophy", "7×", "Hackathon wins", "across AI and Web3"), ("code", "3+", "Years building", "AI into real products")]
 OFFSCREEN = [
@@ -210,19 +206,18 @@ OFFSCREEN = [
 
 
 def bento_highlights(t):
-    h = 214
+    h = 236
     sw = 232
     body = []
     for i, (ic, big, text, sub) in enumerate(STATS):
         x = i * (sw + GAP)
         body += [
             f'<g class="rise" {delay(i)}>',
-            cell(x, 0, sw, h, glow="tl" if i == 0 else None),
-            f'<rect x="{x + sw - 58}" y="22" width="36" height="36" rx="10" fill="{t["primary_soft"]}"/>',
-            icon(ic, x + sw - 49, 31, 18, t["primary"]),
-            f'<text x="{x + 28}" y="126" font-size="64" font-weight="800" letter-spacing="-2" fill="url(#shimmer)">{big}</text>',
-            f'<text x="{x + 30}" y="160" font-size="15.5" font-weight="700" fill="{t["fg"]}">{escape(text)}</text>',
-            f'<text x="{x + 30}" y="182" font-size="13" fill="{t["muted"]}">{escape(sub)}</text>',
+            cell(t, x, 0, sw, h),
+            icon(ic, x + PAD, 32, 20, t["muted"]),
+            f'<text x="{x + PAD - 2}" y="138" font-size="60" font-weight="600" letter-spacing="-1.5" fill="{t["fg"]}">{big}</text>',
+            f'<text x="{x + PAD}" y="178" font-size="15" font-weight="600" fill="{t["fg"]}">{escape(text)}</text>',
+            f'<text x="{x + PAD}" y="200" font-size="13" fill="{t["muted"]}">{escape(sub)}</text>',
             "</g>",
         ]
 
@@ -230,85 +225,85 @@ def bento_highlights(t):
     ow = W - ox
     body += [
         f'<g class="rise" {delay(2)}>',
-        cell(ox, 0, ow, h, glow="br"),
-        label(t, ox + 30, 44, "OFF-SCREEN"),
-        f'<text class="mono" x="{ox + ow - 30}" y="44" font-size="11.5" letter-spacing="1.8" text-anchor="end" fill="{t["faint"]}">WHAT KEEPS ME GROUNDED</text>',
+        cell(t, ox, 0, ow, h),
+        heading(t, ox + PAD, 46, "Off-screen", "sparkles"),
+        sublabel(t, ox + ow - PAD, 46, "What keeps me grounded", "end"),
     ]
     for i, (ic, title, sub) in enumerate(OFFSCREEN):
-        y = 70 + i * 46
+        y = 72 + i * 50
         body += [
-            f'<rect x="{ox + 30}" y="{y}" width="36" height="36" rx="10" fill="{t["primary_soft"]}"/>',
-            icon(ic, ox + 39, y + 9, 18, t["primary"]),
-            f'<text x="{ox + 80}" y="{y + 16}" font-size="15" font-weight="700" fill="{t["fg"]}">{title}</text>',
-            f'<text x="{ox + 80}" y="{y + 33}" font-size="13" fill="{t["muted"]}">{escape(sub)}</text>',
+            f'<rect x="{ox + PAD + .5}" y="{y + .5}" width="37" height="37" rx="8" fill="{t["btn"]}" stroke="{t["border"]}"/>',
+            icon(ic, ox + PAD + 10, y + 10, 18, t["muted"]),
+            f'<text x="{ox + PAD + 54}" y="{y + 16}" font-size="15" font-weight="600" fill="{t["fg"]}">{title}</text>',
+            f'<text x="{ox + PAD + 54}" y="{y + 34}" font-size="13" fill="{t["muted"]}">{escape(sub)}</text>',
         ]
     body.append("</g>")
     return svg(t, W, h, "\n".join(body))
 
 
-# ── Toolbox: every resume skill, grouped like the resume ───────────────
+# ── Toolbox: every resume skill, as GitHub topic tags ──────────────────
 
 # (kind, glyph, name): kind is "brand" (Simple Icons) or "icon" (Lucide, for concepts).
 TOOLS = [
-    ("LANGUAGES", [
+    ("Languages", [
         ("brand", "typescript", "TypeScript"), ("brand", "javascript", "JavaScript"), ("brand", "openjdk", "Java"),
         ("brand", "python", "Python"), ("icon", "database", "SQL"), ("brand", "c", "C"),
     ]),
-    ("FRONTEND", [
+    ("Frontend", [
         ("brand", "react", "React"), ("brand", "nextdotjs", "Next.js"), ("brand", "redux", "Redux"),
         ("brand", "tailwindcss", "Tailwind CSS"), ("brand", "storybook", "Storybook"),
     ]),
-    ("BACKEND", [
+    ("Backend", [
         ("brand", "nodedotjs", "Node.js"), ("brand", "express", "Express.js"), ("brand", "postgresql", "PostgreSQL"),
         ("brand", "redis", "Redis"), ("brand", "firebase", "Firestore"),
     ]),
-    ("AI & SEARCH", [
+    ("AI & search", [
         ("icon", "search", "RAG"), ("brand", "langchain", "LangChain"), ("icon", "brain", "Semantic Kernel"),
         ("brand", "elasticsearch", "Elasticsearch"), ("brand", "qdrant", "Qdrant"),
         ("icon", "message-square-text", "Prompt Engineering"), ("brand", "openai", "OpenAI"), ("brand", "googlegemini", "Gemini"),
     ]),
-    ("INFRA & CLOUD", [
+    ("Infra & cloud", [
         ("brand", "docker", "Docker"), ("brand", "googlecloud", "GCP"), ("brand", "githubactions", "GitHub Actions"),
         ("brand", "vercel", "Vercel"), ("brand", "supabase", "Supabase"),
     ]),
 ]
 
-PILL_H, PILL_GAP, PILL_FS = 38, 10, 13.5
+TAG_H, TAG_GAP, TAG_FS = 32, 8, 13
 
 
-def pill(t, x, y, kind, glyph, name):
-    w = 44 + text_w(name, PILL_FS, 600) + 16
-    mark = brand(glyph, x + 15, y + 11, 16, t["fg"], 0.92) if kind == "brand" else icon(glyph, x + 14, y + 10, 18, t["fg"])
+def tag(t, x, y, kind, glyph, name):
+    """Primer topic tag: accent-subtle pill with accent text."""
+    w = 36 + text_w(name, TAG_FS, 500) + 14
+    mark = brand(glyph, x + 12, y + 9, 14, t["primary"]) if kind == "brand" else icon(glyph, x + 11, y + 8, 16, t["primary"])
     return w, (
-        f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="{PILL_H}" rx="{PILL_H / 2}" fill="{t["primary_soft"]}" '
-        f'fill-opacity=".65" stroke="{t["border"]}"/>' + mark +
-        f'<text x="{x + 40:.1f}" y="{y + 24}" font-size="{PILL_FS}" font-weight="600" fill="{t["fg"]}">{escape(name)}</text>'
+        f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="{TAG_H}" rx="{TAG_H / 2}" fill="{t["primary_soft"]}"/>' + mark +
+        f'<text x="{x + 33:.1f}" y="{y + 21}" font-size="{TAG_FS}" font-weight="500" fill="{t["primary"]}">{escape(name)}</text>'
     )
 
 
 def toolbox(t):
-    pad, label_w = 32, 170
-    left, right = pad + label_w, W - pad
-    body, y, n = [], 84, 0
+    label_w = 150
+    left, right = PAD + label_w, W - PAD
+    body, y, n = [], 80, 0
     for g, (group, items) in enumerate(TOOLS):
         if g:
-            body.append(f'<line x1="{pad}" y1="{y - 14}" x2="{W - pad}" y2="{y - 14}" stroke="{t["border"]}" stroke-opacity=".7"/>')
-        body.append(label(t, pad, y + 24, group))
+            body.append(f'<line x1="{PAD}" y1="{y - 12}" x2="{W - PAD}" y2="{y - 12}" stroke="{t["border"]}" stroke-opacity=".7"/>')
+        body.append(sublabel(t, PAD, y + 21, group))
         x = left
         for kind, glyph, name in items:
-            w = 44 + text_w(name, PILL_FS, 600) + 16
+            w = 36 + text_w(name, TAG_FS, 500) + 14
             if x + w > right:
-                x, y = left, y + PILL_H + PILL_GAP
-            _, markup = pill(t, x, y, kind, glyph, name)
-            body.append(f'<g class="rise" {delay(n, 0.025, 0.2)}>{markup}</g>')
-            x += w + PILL_GAP
+                x, y = left, y + TAG_H + TAG_GAP
+            _, markup = tag(t, x, y, kind, glyph, name)
+            body.append(f'<g class="rise" {delay(n, 0.02, 0.15)}>{markup}</g>')
+            x += w + TAG_GAP
             n += 1
-        y += PILL_H + 28
-    h = y - 4
+        y += TAG_H + 24
+    h = y + 4
     header = [
-        cell(0, 0, W, h, glow="tl"),
-        label(t, pad, 44, "TOOLBOX", "code"),
-        f'<text class="mono" x="{W - pad}" y="44" font-size="11.5" letter-spacing="1.8" text-anchor="end" fill="{t["faint"]}">WHAT I BUILD WITH</text>',
+        cell(t, 0, 0, W, h),
+        heading(t, PAD, 46, "Toolbox", "code"),
+        sublabel(t, W - PAD, 46, "What I build with", "end"),
     ]
     return svg(t, W, h, "\n".join(header + body))
 
@@ -317,14 +312,13 @@ def toolbox(t):
 
 
 def signoff(t):
-    h = 150
+    h = 140
     body = [
-        cell(0, 0, W, h, glow="tl"),
-        f'<rect width="{W}" height="{h}" rx="20" fill="url(#glow-br)"/>',
-        icon("quote", W / 2 - 14, 26, 28, t["primary"]),
-        f'<text class="rise" {delay(0)} x="{W / 2}" y="92" font-size="21" font-style="italic" text-anchor="middle" fill="{t["fg"]}">'
+        cell(t, 0, 0, W, h),
+        icon("quote", W / 2 - 12, 26, 24, t["muted"]),
+        f'<text class="rise" {delay(0)} x="{W / 2}" y="86" font-size="20" font-style="italic" text-anchor="middle" fill="{t["fg"]}">'
         "The best solutions come from understanding the world beyond the screen.</text>",
-        f'<text class="mono rise" {delay(1)} x="{W / 2}" y="124" font-size="12" letter-spacing="2" text-anchor="middle" fill="{t["muted"]}">— KALPIT JAIN</text>',
+        f'<text class="rise" {delay(1)} x="{W / 2}" y="114" font-size="13" text-anchor="middle" fill="{t["muted"]}">— Kalpit Jain</text>',
     ]
     return svg(t, W, h, "\n".join(body))
 

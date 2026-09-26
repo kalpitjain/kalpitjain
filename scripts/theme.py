@@ -1,7 +1,7 @@
-"""Shared look for the README graphics: kalpitjain.dev's navy + blue palette.
+"""Shared look for the README graphics, built on GitHub's own Primer design tokens.
 
-Surfaces are translucent so the cards take on whatever GitHub theme is behind them
-(light, dark, or dark dimmed) instead of painting a slightly different solid colour.
+Cards are flat boxes with hairline borders and no fill, so they sit on the page like
+GitHub's own UI in light, dark, and dark dimmed themes.
 """
 
 import json
@@ -9,62 +9,52 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 W = 1000
-GAP = 16
+GAP = 24  # gutter between cards; ~matches the gap GitHub leaves between stacked images
+PAD = 32  # inner padding of every card
 SANS = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif"
 MONO = "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace"
 
 _icons = json.loads((Path(__file__).parent / "icons.json").read_text())
 BRANDS, LUCIDE = _icons["brands"], _icons["lucide"]
 
+# Primer functional colours (github.com light / dark default).
 THEMES = {
     "dark": {
-        "bg": "rgba(59,130,246,0.035)",
-        "card": "rgba(255,255,255,0.015)",
-        "card_hi": "rgba(255,255,255,0.05)",
-        "fg": "#eef2f7",
-        "muted": "#8a99ad",
-        "faint": "#5d6b80",
-        "border": "rgba(255,255,255,0.11)",
-        "primary": "#3b82f6",
-        "primary_soft": "rgba(59,130,246,0.15)",
-        "shine": "#93c5fd",
-        "green": "#34d399",
-        "glow": 0.22,
-        "blob": 1.0,
-        "heat": ["rgba(255,255,255,0.07)", "rgba(59,130,246,0.35)", "#1e40af", "#2f6fe8", "#7cb4fb"],
+        "fg": "#f0f6fc",
+        "muted": "#9198a1",
+        "faint": "#656c76",
+        "border": "#3d444d",
+        "card": "rgba(110,118,129,0.035)",
+        "btn": "#212830",
+        "primary": "#4493f8",
+        "primary_soft": "rgba(56,139,253,0.15)",
+        "green": "#3fb950",
+        "heat": ["rgba(110,118,129,0.14)", "#033a16", "#196c2e", "#2ea043", "#56d364"],
     },
     "light": {
-        "bg": "rgba(59,130,246,0.035)",
-        "card": "rgba(59,130,246,0.012)",
-        "card_hi": "rgba(59,130,246,0.045)",
-        "fg": "#121826",
-        "muted": "#58606f",
-        "faint": "#8b95a5",
-        "border": "rgba(31,35,40,0.12)",
-        "primary": "#3b82f6",
-        "primary_soft": "rgba(59,130,246,0.10)",
-        "shine": "#1d4ed8",
-        "green": "#10b981",
-        "glow": 0.12,
-        "blob": 0.5,
-        "heat": ["rgba(31,35,40,0.07)", "#c7dbfd", "#93c5fd", "#3b82f6", "#1d4ed8"],
+        "fg": "#1f2328",
+        "muted": "#59636e",
+        "faint": "#818b98",
+        "border": "#d1d9e0",
+        "card": "rgba(208,215,222,0.08)",
+        "btn": "#f6f8fa",
+        "primary": "#0969da",
+        "primary_soft": "#ddf4ff",
+        "green": "#1a7f37",
+        "heat": ["#eff2f5", "#aceebb", "#4ac26b", "#2da44e", "#116329"],
     },
 }
 
 BASE_CSS = f"""
 text {{ font-family: {SANS}; }}
 .mono {{ font-family: {MONO}; }}
-@keyframes rise {{ from {{ opacity: 0; transform: translateY(10px); }} to {{ opacity: 1; transform: none; }} }}
+@keyframes rise {{ from {{ opacity: 0; transform: translateY(8px); }} to {{ opacity: 1; transform: none; }} }}
 @keyframes fade {{ from {{ opacity: 0; }} to {{ opacity: 1; }} }}
 @keyframes blink {{ 0%, 49% {{ opacity: 1; }} 50%, 100% {{ opacity: 0; }} }}
-@keyframes pulse {{ 0% {{ opacity: .7; transform: scale(1); }} 100% {{ opacity: 0; transform: scale(2.6); }} }}
-@keyframes drift1 {{ 0%, 100% {{ transform: translate(0, 0); }} 50% {{ transform: translate(70px, 30px); }} }}
-@keyframes drift2 {{ 0%, 100% {{ transform: translate(0, 0); }} 50% {{ transform: translate(-80px, -25px); }} }}
-.rise {{ opacity: 0; animation: rise .7s cubic-bezier(.25,.46,.45,.94) forwards; }}
+@keyframes pulse {{ 0% {{ opacity: .6; transform: scale(1); }} 100% {{ opacity: 0; transform: scale(2.4); }} }}
+.rise {{ opacity: 0; animation: rise .6s cubic-bezier(.25,.46,.45,.94) forwards; }}
 .fade {{ opacity: 0; animation: fade .5s ease-out forwards; }}
 .pulse {{ transform-box: fill-box; transform-origin: center; animation: pulse 2s ease-out infinite; }}
-.d1 {{ animation: drift1 14s ease-in-out infinite; }}
-.d2 {{ animation: drift2 17s ease-in-out infinite; }}
 @media (prefers-reduced-motion: reduce) {{
   * {{ animation: none !important; }}
   .rise, .fade {{ opacity: 1; }}
@@ -72,37 +62,11 @@ text {{ font-family: {SANS}; }}
 """
 
 
-def shared_defs(t):
-    """Gradients every card uses: glass fill, gradient edge, corner glow."""
-    return f"""
-<linearGradient id="fill" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="{t['card_hi']}"/><stop offset="1" stop-color="{t['card']}"/>
-</linearGradient>
-<linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="{t['primary']}" stop-opacity=".5"/>
-  <stop offset=".45" stop-color="{t['border']}"/>
-  <stop offset="1" stop-color="{t['border']}"/>
-</linearGradient>
-<radialGradient id="glow" cx="0" cy="0" r="1">
-  <stop offset="0" stop-color="{t['primary']}" stop-opacity="{t['glow']}"/>
-  <stop offset="1" stop-color="{t['primary']}" stop-opacity="0"/>
-</radialGradient>
-<radialGradient id="glow-br" cx="1" cy="1" r="1">
-  <stop offset="0" stop-color="#60a5fa" stop-opacity="{t['glow'] * 0.8:.2f}"/>
-  <stop offset="1" stop-color="#60a5fa" stop-opacity="0"/>
-</radialGradient>
-<linearGradient id="shimmer" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="440" y2="0" spreadMethod="reflect">
-  <stop offset="0" stop-color="{t['primary']}"/><stop offset=".5" stop-color="{t['shine']}"/><stop offset="1" stop-color="{t['primary']}"/>
-  <animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="880 0" dur="6s" repeatCount="indefinite"/>
-</linearGradient>
-"""
-
-
 def svg(t, width, height, body, css="", defs=""):
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" fill="none">\n'
-        f"<style>{BASE_CSS}{css}</style>\n<defs>{shared_defs(t)}{defs}</defs>\n{body}\n</svg>\n"
+        f"<style>{BASE_CSS}{css}</style>\n<defs>{defs}</defs>\n{body}\n</svg>\n"
     )
 
 
@@ -120,50 +84,60 @@ def brand(name, x, y, size, color, opacity=1):
     )
 
 
-def delay(i, step=0.12, base=0.1):
+def delay(i, step=0.1, base=0.05):
     return f'style="animation-delay:{base + i * step:.2f}s"'
 
 
-def cell(x, y, w, h, rx=20, glow="tl"):
-    """Glass card: gradient fill, soft corner glow, gradient hairline edge."""
-    glow_fill = {"tl": "url(#glow)", "br": "url(#glow-br)"}.get(glow)
-    out = f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h:.1f}" rx="{rx}" fill="url(#fill)"/>'
-    if glow_fill:
-        out += f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h:.1f}" rx="{rx}" fill="{glow_fill}"/>'
-    out += (
-        f'<rect x="{x + .5:.1f}" y="{y + .5:.1f}" width="{w - 1:.1f}" height="{h - 1:.1f}" rx="{rx - .5}" '
-        f'stroke="url(#edge)"/>'
+def cell(t, x, y, w, h, rx=12):
+    """GitHub 'Box': hairline border, near-transparent fill."""
+    return (
+        f'<rect x="{x + .5:.1f}" y="{y + .5:.1f}" width="{w - 1:.1f}" height="{h - 1:.1f}" rx="{rx}" '
+        f'fill="{t["card"]}" stroke="{t["border"]}"/>'
     )
-    return out
 
 
-def label(t, x, y, text, icon_name=None):
-    """Small uppercase mono eyebrow used at the top of each card."""
+def heading(t, x, y, text, icon_name=None):
+    """Card title in GitHub's sentence-case style, with an optional muted icon."""
     out = ""
     if icon_name:
-        out += icon(icon_name, x, y - 11, 14, t["primary"])
-        x += 22
-    return out + (
-        f'<text class="mono" x="{x:.1f}" y="{y}" font-size="11.5" font-weight="600" letter-spacing="1.8" '
+        out += icon(icon_name, x, y - 13, 16, t["muted"])
+        x += 24
+    return out + f'<text x="{x:.1f}" y="{y}" font-size="15" font-weight="600" fill="{t["fg"]}">{escape(text)}</text>'
+
+
+def sublabel(t, x, y, text, anchor="start"):
+    """Small muted caption for sub-sections and right-aligned hints."""
+    return (
+        f'<text x="{x:.1f}" y="{y}" font-size="12.5" font-weight="600" text-anchor="{anchor}" '
         f'fill="{t["muted"]}">{escape(text)}</text>'
     )
 
 
-def backdrop(t, h, rx, blobs):
-    """Navy panel with drifting blurred glows and a faint dot grid (for hero-style panels)."""
-    defs = f"""
-<clipPath id="frame"><rect width="{W}" height="{h}" rx="{rx}"/></clipPath>
-<filter id="blur" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="55"/></filter>
-<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="{t['fg']}" fill-opacity=".07"/></pattern>
-"""
-    circles = "".join(
-        f'<circle class="{cls}" cx="{cx}" cy="{cy}" r="{r}" fill="{color}" fill-opacity="{op * t["blob"]:.2f}"/>'
-        for cls, cx, cy, r, color, op in blobs
+def graph_backdrop(t, w, h, rx=12, seed=7):
+    """Faint contribution-graph squares at both edges, fading out towards the centre."""
+    step, size = 15, 11
+    cols, rows = int(w // step), int(h // step)
+    x0, y0 = (w - cols * step + step - size) / 2, (h - rows * step + step - size) / 2
+    edge = cols * 0.26
+    rng = seed
+    rects = []
+    for c in range(cols):
+        dist = min(c, cols - 1 - c)
+        if dist > edge:
+            continue
+        for r in range(rows):
+            rng = (rng * 1103515245 + 12345) & 0x7FFFFFFF
+            roll = rng % 100
+            level = 0 if roll < 45 else 1 if roll < 68 else 2 if roll < 84 else 3 if roll < 95 else 4
+            op = max(0.0, 1 - dist / edge) ** 1.4 * (0.38 if level else 0.6)
+            if op < 0.05:
+                continue
+            rects.append(
+                f'<rect x="{x0 + c * step:.1f}" y="{y0 + r * step:.1f}" width="{size}" height="{size}" rx="2.5" '
+                f'fill="{t["heat"][level]}" fill-opacity="{op:.2f}"/>'
+            )
+    return (
+        f'<clipPath id="frame"><rect width="{w}" height="{h}" rx="{rx}"/></clipPath>'
+        f'<g clip-path="url(#frame)" class="fade" style="animation-duration:1.2s">{"".join(rects)}</g>'
+        + cell(t, 0, 0, w, h, rx)
     )
-    body = (
-        f'<g clip-path="url(#frame)"><rect width="{W}" height="{h}" fill="{t["bg"]}"/>'
-        f'<rect width="{W}" height="{h}" fill="url(#dots)"/>'
-        f'<g filter="url(#blur)">{circles}</g></g>'
-        f'<rect x=".75" y=".75" width="{W - 1.5}" height="{h - 1.5}" rx="{rx - 0.75}" stroke="url(#edge)" stroke-width="1.5"/>'
-    )
-    return defs, body

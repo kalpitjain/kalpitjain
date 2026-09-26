@@ -12,7 +12,7 @@ import urllib.request
 from datetime import date, timedelta
 from pathlib import Path
 
-from theme import GAP, THEMES, W, cell, delay, icon, label, svg
+from theme import GAP, PAD, THEMES, W, cell, delay, icon, sublabel, svg
 
 QUERY = """
 query($login: String!) {
@@ -81,14 +81,14 @@ def plural(n, word):
 
 
 def card(t, s):
-    pad = 32
+    pad = PAD
     tiles = [
         ("git-commit", f"{s['total']:,}", "Contributions"),
         ("flame", plural(s["current"], "day"), "Current streak"),
         ("trophy", plural(s["longest"], "day"), "Longest streak"),
         ("zap", f"{s['active']}", "Active days"),
     ]
-    tile_y, tile_h = 0, 96
+    tile_h = 92
     tile_w = (W - GAP * 3) / 4
 
     # Heatmap: weeks as columns, Sunday-first rows, like GitHub's graph.
@@ -98,9 +98,10 @@ def card(t, s):
     weeks = ((date.fromisoformat(days[-1]["date"]) - start).days // 7) + 1
     step = (W - pad * 2 + 3) / weeks
     size = step - 3
-    heat_top = tile_h + GAP + 96
+    box_y = tile_h + GAP
+    heat_top = box_y + 96
     heat_h = 7 * step - 3
-    h = heat_top + heat_h + 64
+    h = heat_top + heat_h + 62
     lvl = levels([d["count"] for d in days])
 
     body = []
@@ -108,52 +109,46 @@ def card(t, s):
         x = i * (tile_w + GAP)
         body += [
             f'<g class="rise" {delay(i, 0.08)}>',
-            cell(x, tile_y, tile_w, tile_h, glow="tl" if i == 0 else None),
-            f'<rect x="{x + 20:.1f}" y="{tile_y + 28}" width="40" height="40" rx="11" fill="{t["primary_soft"]}"/>',
-            icon(ic, x + 30, tile_y + 38, 20, t["primary"]),
-            f'<text x="{x + 74:.1f}" y="{tile_y + 48}" font-size="24" font-weight="800" letter-spacing="-.5" fill="{t["fg"]}">{value}</text>',
-            f'<text x="{x + 74:.1f}" y="{tile_y + 69}" font-size="13" fill="{t["muted"]}">{text}</text>',
+            cell(t, x, 0, tile_w, tile_h),
+            f'<text x="{x + 24:.1f}" y="44" font-size="22" font-weight="600" fill="{t["fg"]}">{value}</text>',
+            f'<text x="{x + 24:.1f}" y="67" font-size="13" fill="{t["muted"]}">{text}</text>',
+            icon(ic, x + tile_w - 24 - 18, 22, 18, t["muted"]),
             "</g>",
         ]
 
-    box_y = tile_h + GAP
     updated = s["updated"].strftime("%-d %b %Y")
     body += [
-        cell(0, box_y, W, h - box_y, glow="br"),
-        label(t, pad, box_y + 44, "CONTRIBUTIONS · PAST 12 MONTHS", "activity"),
-        f'<text class="mono" x="{W - pad}" y="{box_y + 44}" font-size="11.5" letter-spacing="1" text-anchor="end" fill="{t["faint"]}">UPDATED {updated.upper()}</text>',
+        cell(t, 0, box_y, W, h - box_y),
+        f'<text x="{pad}" y="{box_y + 46}" font-size="15" fill="{t["fg"]}"><tspan font-weight="600">{s["total"]:,}</tspan> contributions in the last year</text>',
+        sublabel(t, W - pad, box_y + 46, f"Updated {updated}", "end"),
     ]
 
     seen = set()
     for d in days:
         day = date.fromisoformat(d["date"])
-        offset = (day - start).days
-        col, row = divmod(offset, 7)
+        col, row = divmod((day - start).days, 7)
         x = pad + col * step
         y = heat_top + row * step
         level = lvl(d["count"])
         body.append(
-            f'<rect class="fade" style="animation-delay:{0.3 + col * 0.018 + row * 0.01:.3f}s" x="{x:.1f}" y="{y:.1f}" '
-            f'width="{size:.1f}" height="{size:.1f}" rx="{size * 0.22:.1f}" fill="{t["heat"][level]}"/>'
+            f'<rect class="fade" style="animation-delay:{0.2 + col * 0.015 + row * 0.008:.3f}s" x="{x:.1f}" y="{y:.1f}" '
+            f'width="{size:.1f}" height="{size:.1f}" rx="{size * 0.2:.1f}" fill="{t["heat"][level]}"/>'
         )
         # Month label above the first full week of each month.
         if day.day <= 7 and row == 0 and day.strftime("%Y-%m") not in seen and col < weeks - 2:
             seen.add(day.strftime("%Y-%m"))
-            body.append(
-                f'<text class="mono" x="{x:.1f}" y="{heat_top - 12}" font-size="11.5" fill="{t["muted"]}">{day.strftime("%b")}</text>'
-            )
+            body.append(f'<text x="{x:.1f}" y="{heat_top - 11}" font-size="12" fill="{t["muted"]}">{day.strftime("%b")}</text>')
 
     legend_y = heat_top + heat_h + 34
     body.append(
-        f'<text x="{pad}" y="{legend_y}" font-size="13" fill="{t["muted"]}">'
-        f'<tspan fill="{t["fg"]}" font-weight="700">{s["total"]:,}</tspan> contributions · best day '
-        f'<tspan fill="{t["fg"]}" font-weight="700">{s["best"]}</tspan></text>'
+        f'<text x="{pad}" y="{legend_y}" font-size="12.5" fill="{t["muted"]}">Best day: '
+        f'<tspan fill="{t["fg"]}" font-weight="600">{s["best"]}</tspan> contributions</text>'
     )
-    lx = W - pad - 5 * 17 - 40
-    body.append(f'<text class="mono" x="{lx - 10}" y="{legend_y}" font-size="11.5" text-anchor="end" fill="{t["faint"]}">Less</text>')
+    lx = W - pad - 5 * 16 - 36
+    body.append(f'<text x="{lx - 8}" y="{legend_y}" font-size="12" text-anchor="end" fill="{t["muted"]}">Less</text>')
     for i, color in enumerate(t["heat"]):
-        body.append(f'<rect x="{lx + i * 17}" y="{legend_y - 11}" width="13" height="13" rx="3" fill="{color}"/>')
-    body.append(f'<text class="mono" x="{lx + 5 * 17 + 6}" y="{legend_y}" font-size="11.5" fill="{t["faint"]}">More</text>')
+        body.append(f'<rect x="{lx + i * 16}" y="{legend_y - 11}" width="12" height="12" rx="2.5" fill="{color}"/>')
+    body.append(f'<text x="{lx + 5 * 16 + 4}" y="{legend_y}" font-size="12" fill="{t["muted"]}">More</text>')
 
     return svg(t, W, h, "\n".join(body))
 
